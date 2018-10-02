@@ -52,5 +52,18 @@ Route.post('/hacer_pedido', ({ request, response }) => {
     const restaurant = Ws.getChannel('restaurant:*');
     let topic = restaurant.topic('restaurant:ordenes');
     topic.broadcast('message',body);
-})
+});
 
+
+Route.post('/actualizar_pedido', ({ request, response }) => {
+  const body = request.post();
+    const restaurant = Ws.getChannel('restaurant:*');
+    let topic = restaurant.topic('restaurant:pedir');
+
+    let clientes = require(__dirname+'/../cliente.json');
+    
+    topic.emitTo('message',body,[clientes[body.username]]);
+    return response.json(body);
+});
+
+//restaurant:pedir#cjms90uk80000bcgqlbi48nbf

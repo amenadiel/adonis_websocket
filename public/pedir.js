@@ -32,10 +32,14 @@ function subscribeToChannel() {
       <div class="message">Se envió su pedido <b>${message.pedido}</b> a nombre de <b> ${message.username} </b> </div>
     `);
   });
+
+  ws.getSubscription("restaurant:pedir").emit("hello", {
+        username: window.username
+      });
 }
 
 function startChat() {
-  ws = adonis.Ws().connect();
+  ws = adonis.Ws().connect({reconnection:false});
 
   ws.on("open", () => {
     $(".connection-status").addClass("connected");
